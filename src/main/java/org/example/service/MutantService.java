@@ -7,12 +7,16 @@ import org.example.entity.DnaRecord;
 import org.example.exception.DnaHashCalculationException;
 import org.example.exception.DnaNotFoundException;
 import org.example.repository.DnaRecordRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class MutantService {
     private final MutantDetector mutantDetector;
     private final DnaRecordRepository dnaRecordRepository;
     @Transactional
+    @CacheEvict(value = "stats", allEntries = true)
     public boolean analizarYPersistir(String[] dna){
         String hash=generarHash(dna);
         Optional<DnaRecord>existe=dnaRecordRepository.findByDnaHash(hash);
@@ -48,6 +53,7 @@ public class MutantService {
         throw new DnaHashCalculationException("Error al generar el hash del dna", e);
     }
     }
+    @CacheEvict(value = "stats", allEntries = true)
     public void eliminarRegistroPorHash(String hash){
         Optional<DnaRecord> registro = dnaRecordRepository.findByDnaHash(hash);
 
@@ -56,6 +62,13 @@ public class MutantService {
         }
 
         dnaRecordRepository.delete(registro.get());
+    }
+    @Async
+    @CacheEvict(value = "stats", allEntries = true)
+    @Transactional
+    public CompletableFuture<Boolean>analizarYPersistirAsync(String[]dna){
+        boolean resultado=analizarYPersistir(dna);
+        return CompletableFuture.completedFuture(resultado);
     }
 
 }

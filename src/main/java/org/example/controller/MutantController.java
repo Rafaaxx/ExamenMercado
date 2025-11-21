@@ -30,8 +30,8 @@ public class MutantController {
          @ApiResponse(responseCode = "403", description = "El dna no pertenece a un mutante."),
          @ApiResponse(responseCode ="400", description = "Dna invalido.")
  })
- public ResponseEntity<Void>verificarMutante(@Valid @RequestBody DnaRequest dnaRequest){
-   boolean esMutante=mutantService.analizarYPersistir(dnaRequest.dna());
+ public ResponseEntity<Void>verificarMutante(@Valid @RequestBody DnaRequest dnaRequest)throws Exception{
+   boolean esMutante=mutantService.analizarYPersistirAsync(dnaRequest.dna()).get();
    if(esMutante){
        return ResponseEntity.status(HttpStatus.OK).build();
    }else{

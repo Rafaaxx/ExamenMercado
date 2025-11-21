@@ -1,8 +1,11 @@
 package org.example.service;
 
+
 import lombok.RequiredArgsConstructor;
 import org.example.dto.StatsResponse;
 import org.example.repository.DnaRecordRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class StatsService {
     private final DnaRecordRepository dnaRecordRepository;
+    @Cacheable("stats")
     public StatsResponse obtenerStats(){
      long contadorDeMutantes=dnaRecordRepository.countByIsMutant(true);
      long contadorDeHumanos=dnaRecordRepository.countByIsMutant(false);

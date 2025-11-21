@@ -1,3 +1,5 @@
+package org.example.ratelimit;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
