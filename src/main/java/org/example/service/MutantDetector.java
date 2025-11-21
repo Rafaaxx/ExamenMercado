@@ -1,7 +1,8 @@
 package org.example.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 public class MutantDetector {
     private static final int  SEQUENCE_LENGTH = 4;
@@ -71,27 +72,43 @@ public class MutantDetector {
     }
     private boolean checkHorizontal(char[][] matrix, int row, int col){
         final char base = matrix[row][col];
-        return matrix[row][col + 1] == base &&
+        boolean encontrado=matrix[row][col + 1] == base &&
                 matrix[row][col + 2] == base &&
                 matrix[row][col + 3] == base;
+        if (encontrado){
+            log.debug("Patron horizontal encontrado en fila {} col {}", row, col);
+        }
+        return encontrado;
     }
     private boolean checkVertical(char[][] matrix, int row, int col){
         final char base = matrix[row][col];
-        return matrix[row + 1][col] == base &&
+        boolean encontrado=matrix[row + 1][col] == base &&
                 matrix[row + 2][col] == base &&
                 matrix[row + 3][col] == base;
+        if (encontrado){
+            log.debug("Patron vertical encontrado en fila {} col {}", row, col);
+        }
+        return encontrado;
     }
     private boolean checkDiagonalDescending(char[][] matrix, int row, int col){
         final char base = matrix[row][col];
-        return matrix[row + 1][col + 1] == base &&
+        boolean encontrado= matrix[row + 1][col + 1] == base &&
                 matrix[row + 2][col + 2] == base &&
                 matrix[row + 3][col + 3] == base;
+        if (encontrado){
+            log.debug("Patron diagonal descendente encontrado en fila {} col {}", row, col);
+        }
+        return encontrado;
     }
     private boolean checkDiagonalAscending(char[][] matrix, int row, int col){
         final char base = matrix[row][col];
-        return matrix[row - 1][col + 1] == base &&
+        boolean encontrado=matrix[row - 1][col + 1] == base &&
                 matrix[row - 2][col + 2] == base &&
                 matrix[row - 3][col + 3] == base;
+        if (encontrado){
+            log.debug("Patron diagonal ascendente encontrado en fila {} col {}", row, col);
+        }
+        return encontrado;
     }
 
 }

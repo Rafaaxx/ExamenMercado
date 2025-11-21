@@ -36,6 +36,26 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse=ErrorResponse.simple(HttpStatus.BAD_REQUEST.value(),"El cuerpo debe tener contenido",servletRequest.getRequestURI(),ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+    @ExceptionHandler(DnaNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDnaNotFound(DnaNotFoundException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.simple(
+                HttpStatus.NOT_FOUND.value(),
+                "DNA no encontrado",
+                request.getDescription(false),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex, WebRequest req) {
+        ErrorResponse errorResponse = ErrorResponse.simple(
+                HttpStatus.BAD_REQUEST.value(),
+                "Parámetros inválidos",
+                req.getDescription(false),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse>handleGenericException(Exception ex, WebRequest request){
         ErrorResponse errorResponse=ErrorResponse.simple(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error interno del servidor", request.getDescription(false),ex.getMessage());

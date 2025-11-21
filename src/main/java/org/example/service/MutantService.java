@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entity.DnaRecord;
 import org.example.exception.DnaHashCalculationException;
+import org.example.exception.DnaNotFoundException;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,15 @@ public class MutantService {
         }catch (NoSuchAlgorithmException e) {
         throw new DnaHashCalculationException("Error al generar el hash del dna", e);
     }
+    }
+    public void eliminarRegistroPorHash(String hash){
+        Optional<DnaRecord> registro = dnaRecordRepository.findByDnaHash(hash);
+
+        if (registro.isEmpty()) {
+            throw new DnaNotFoundException("No existe un registro con ese hash"); // luego lo manejamos con Handler
+        }
+
+        dnaRecordRepository.delete(registro.get());
     }
 
 }

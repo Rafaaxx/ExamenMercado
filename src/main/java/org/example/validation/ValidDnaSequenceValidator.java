@@ -13,7 +13,7 @@ public class ValidDnaSequenceValidator
 
         int n = dna.length;
         Pattern pattern = Pattern.compile("^[ATCG]+$");
-        if(n<4){
+        if(n<4 || n>1000){
             return false;
         }
         for (String row : dna) {

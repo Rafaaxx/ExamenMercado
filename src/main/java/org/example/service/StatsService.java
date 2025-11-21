@@ -5,6 +5,8 @@ import org.example.dto.StatsResponse;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class StatsService {
@@ -14,5 +16,14 @@ public class StatsService {
      long contadorDeHumanos=dnaRecordRepository.countByIsMutant(false);
      double ratio=(contadorDeHumanos==0)? contadorDeMutantes:(double)contadorDeMutantes/contadorDeHumanos;
      return new StatsResponse(contadorDeMutantes,contadorDeHumanos,ratio);
+    }
+    public StatsResponse obtenerStatsFiltrado(LocalDateTime start,LocalDateTime end) {
+
+        long contadormutantes = dnaRecordRepository.countByIsMutantAndCreatedAtBetween(true, start, end);
+        long contadorhumanos = dnaRecordRepository.countByIsMutantAndCreatedAtBetween(false, start, end);
+
+        double ratio = contadorhumanos == 0 ? contadormutantes : (double) contadormutantes / contadorhumanos;
+        StatsResponse statsResponse=new StatsResponse(contadormutantes,contadorhumanos,ratio);
+        return statsResponse;
     }
 }
