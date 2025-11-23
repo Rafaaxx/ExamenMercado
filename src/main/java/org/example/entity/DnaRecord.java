@@ -20,10 +20,10 @@ public class DnaRecord {
     private Long id;
     @Column(name = "dna_hash", nullable = false, unique = true, length = 64)
     private String dnaHash;
-    @Column(nullable = false)
+    @Column(nullable = false,name = "is_mutant")
     private boolean isMutant;
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false,name = "created_at")
     private LocalDateTime createdAt;
 
     public DnaRecord(String hash, boolean isMutant) {

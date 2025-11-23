@@ -71,7 +71,12 @@ public class MutantDetectorTest {
     }
    @Test
    public void testEsHumano(){
-        String[] dna={"ATGCGA", "CAGTGC", "TTATGT", "AGAACG", "CACCTA", "TCACTG"};
+        String[] dna={"ATGCGA",
+                "CAGTGC",
+                "TTATGT",
+                "AGAACG",
+                "CACCTA",
+                "TCACTG"};
         assertFalse(mutantDetector.isMutant(dna));
    }
    @Test
